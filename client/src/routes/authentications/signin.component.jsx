@@ -1,7 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import googleSvg from "../../assets/img/google.svg";
 
 function SignIn() {
+  const navigate = useNavigate();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const email = document.getElementById("email");
+    console.log(email);
+    navigate("/dashboard");
+  };
   return (
     <div id="mytask-layout" className="theme-indigo">
       {/* main body area */}
@@ -44,7 +51,7 @@ function SignIn() {
                   style={{ maxWidth: "32rem" }}
                 >
                   {/* Form */}
-                  <form className="row g-1 p-3 p-md-4">
+                  <form className="row g-1 p-3 p-md-4" onSubmit={handleSubmit}>
                     <div className="col-12 text-center mb-1 mb-lg-5">
                       <h1>Sign in</h1>
                       <span>Free access to our dashboard.</span>
@@ -112,13 +119,13 @@ function SignIn() {
                       </div>
                     </div>
                     <div className="col-12 text-center mt-4">
-                      <Link
-                        to="/"
+                      <button
+                        type="submit"
                         className="btn btn-lg btn-block btn-light lift text-uppercase"
                         atl="signin"
                       >
                         SIGN IN
-                      </Link>
+                      </button>
                     </div>
                     <div className="col-12 text-center mt-4">
                       <span className="text-muted">

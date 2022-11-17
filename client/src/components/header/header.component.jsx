@@ -1,7 +1,13 @@
 import logoDark from "../../assets/img/logo-dark.png";
 import logoLight from "../../assets/img/logo-light.png";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSideBarQuery } from "../../store/sidebar/sidebar.selector";
+import { sidebarActions } from "../../store/sidebar/sidebar.slice";
 
 function Header() {
+  const dispatch = useDispatch();
+  const isOpen = useSelector(selectSideBarQuery);
+  const toggleSideBar = () => dispatch(sidebarActions.setIsOpen(!isOpen));
   return (
     <>
       {/* Body: Header */}
@@ -299,6 +305,7 @@ function Header() {
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#mainHeader"
+              onClick={toggleSideBar}
             >
               <span className="fa fa-bars" />
             </button>

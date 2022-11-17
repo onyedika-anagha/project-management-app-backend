@@ -1,8 +1,28 @@
-function Sidebar() {
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, Link } from "react-router-dom";
+import { selectSideBarQuery } from "../../store/sidebar/sidebar.selector";
+import { sidebarActions } from "../../store/sidebar/sidebar.slice";
+import { themeActions } from "../../store/theme/theme-slice";
+import { selectTheme } from "../../store/theme/theme.selector";
+
+const Sidebar = () => {
+  const dispatch = useDispatch();
+  const theme = useSelector(selectTheme);
+  const isOpen = useSelector(selectSideBarQuery);
+  const toggleSideBar = () => dispatch(sidebarActions.setIsOpen(!isOpen));
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      dispatch(themeActions.changeMode("light"));
+      localStorage.setItem("theme", "light");
+    } else {
+      dispatch(themeActions.changeMode("dark"));
+      localStorage.setItem("theme", "dark");
+    }
+  };
   return (
     <>
       {/* sidebar */}
-      <div className="sidebar px-4 py-4 py-md-5 me-0">
+      <div className={`sidebar px-4 py-4 py-md-5 me-0 ${isOpen ? "open" : ""}`}>
         <div className="d-flex flex-column h-100">
           <a href="index.html" className="mb-0 brand-icon">
             <span className="logo-icon">
@@ -26,34 +46,35 @@ function Sidebar() {
           {/* Menu: main ul */}
           <ul className="menu-list flex-grow-1 mt-3">
             <li className="collapsed">
-              <a
-                className="m-link active"
-                data-bs-toggle="collapse"
-                data-bs-target="#dashboard-Components"
-                href="#!"
+              <NavLink
+                to="/dashboard"
+                className={(navData) =>
+                  navData.isActive && window.location.pathname === "/dashboard"
+                    ? "m-link active"
+                    : "m-link"
+                }
               >
                 <i className="icofont-home fs-5" /> <span>Dashboard</span>{" "}
-                <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-              </a>
-              {/* Menu: Sub menu ul */}
-              <ul className="sub-menu collapse show" id="dashboard-Components">
-                <li>
-                  <a className="ms-link active" href="index.html">
-                    {" "}
-                    <span>Hr Dashboard</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="ms-link" href="project-dashboard.html">
-                    {" "}
-                    <span>Project Dashboard</span>
-                  </a>
-                </li>
-              </ul>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/profile"
+                className={(navData) =>
+                  navData.isActive ? "m-link active" : "m-link"
+                }
+              >
+                <i className="icofont-user" />
+                <span className="nk-menu-text">Profile</span>
+              </NavLink>
             </li>
             <li className="collapsed">
               <a
-                className="m-link"
+                className={
+                  window.location.pathname === "/dashboard/projects"
+                    ? "m-link active"
+                    : "m-link"
+                }
                 data-bs-toggle="collapse"
                 data-bs-target="#project-Components"
                 href="#!"
@@ -65,78 +86,52 @@ function Sidebar() {
               {/* Menu: Sub menu ul */}
               <ul className="sub-menu collapse" id="project-Components">
                 <li>
-                  <a className="ms-link" href="projects.html">
+                  <Link
+                    className={
+                      window.location.pathname === "/dashboard/projects"
+                        ? "m-link active"
+                        : "m-link"
+                    }
+                    to="/dashboard/projects"
+                  >
                     <span>Projects</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="ms-link" href="task.html">
+                  <Link
+                    className={
+                      window.location.pathname === "/dashboard/task"
+                        ? "m-link active"
+                        : "m-link"
+                    }
+                    to="/dashboard/task"
+                  >
                     <span>Tasks</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="ms-link" href="timesheet.html">
+                  <Link
+                    className={
+                      window.location.pathname === "/dashboard/timesheet"
+                        ? "m-link active"
+                        : "m-link"
+                    }
+                    to="/dashboard/timesheet"
+                  >
                     <span>Timesheet</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="ms-link" href="team-leader.html">
-                    <span>Leaders</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </li>
-            <li className="collapsed">
-              <a
-                className="m-link"
-                data-bs-toggle="collapse"
-                data-bs-target="#tikit-Components"
-                href="#!"
+            <li className="">
+              <NavLink
+                className={(navData) =>
+                  navData.isActive ? "m-link active" : "m-link"
+                }
+                to="/dashboard/clients"
               >
-                <i className="icofont-ticket" /> <span>Tickets</span>{" "}
-                <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-              </a>
-              {/* Menu: Sub menu ul */}
-              <ul className="sub-menu collapse" id="tikit-Components">
-                <li>
-                  <a className="ms-link" href="tickets.html">
-                    {" "}
-                    <span>Tickets View</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="ms-link" href="ticket-detail.html">
-                    {" "}
-                    <span>Ticket Detail</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="collapsed">
-              <a
-                className="m-link"
-                data-bs-toggle="collapse"
-                data-bs-target="#client-Components"
-                href="#!"
-              >
-                <i className="icofont-user-male" /> <span>Our Clients</span>{" "}
-                <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-              </a>
-              {/* Menu: Sub menu ul */}
-              <ul className="sub-menu collapse" id="client-Components">
-                <li>
-                  <a className="ms-link" href="ourclients.html">
-                    {" "}
-                    <span>Clients</span>
-                  </a>
-                </li>
-                <li>
-                  <a className="ms-link" href="profile.html">
-                    {" "}
-                    <span>Client Profile</span>
-                  </a>
-                </li>
-              </ul>
+                <i className="icofont-user-male" /> <span>Clients</span>{" "}
+              </NavLink>
             </li>
             <li className="collapsed">
               <a
@@ -348,6 +343,8 @@ function Sidebar() {
                   className="form-check-input"
                   type="checkbox"
                   id="theme-switch"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
                 />
                 <label className="form-check-label" htmlFor="theme-switch">
                   Enable Dark Mode!
@@ -371,6 +368,7 @@ function Sidebar() {
           <button
             type="button"
             className="btn btn-link sidebar-mini-btn text-light"
+            onClick={toggleSideBar}
           >
             <span className="ms-2">
               <i className="icofont-bubble-right" />
@@ -378,8 +376,24 @@ function Sidebar() {
           </button>
         </div>
       </div>
+      {isOpen && (
+        <div
+          className="sidebar-overlay"
+          style={{
+            background: "rgba(0,0,0,0.25)",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            position: "absolute",
+            zIndex: 99991,
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={toggleSideBar}
+        ></div>
+      )}
     </>
   );
-}
+};
 
 export default Sidebar;
