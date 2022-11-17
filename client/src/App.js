@@ -6,17 +6,20 @@ import SignUp from "./routes/authentications/signup.component";
 import "./assets/css/style.css";
 import InitialState from "./utils/initial-state/initial-state";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+
 function App() {
   return (
     <>
       <InitialState />
-
       <Routes>
         <Route path="/" element={<Navigate replace to={"/login"} />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
       </Routes>
+      <ToastContainer />
     </>
   );
 }

@@ -1,8 +1,7 @@
-import logoDark from "../../assets/img/logo-dark.png";
-import logoLight from "../../assets/img/logo-light.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSideBarQuery } from "../../store/sidebar/sidebar.selector";
 import { sidebarActions } from "../../store/sidebar/sidebar.slice";
+import profile_av from "../../assets/images/profile_av.png";
 
 function Header() {
   const dispatch = useDispatch();
@@ -25,36 +24,6 @@ function Header() {
                   <i className="icofont-info-square fs-5" />
                 </a>
                 <div className="avatar-list avatar-list-stacked px-3">
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar2.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar1.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar3.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar4.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar7.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle"
-                    src="assets/images/xs/avatar8.jpg"
-                    alt=""
-                  />
                   <span
                     className="avatar rounded-circle text-center pointer"
                     data-bs-toggle="modal"
@@ -236,7 +205,7 @@ function Header() {
                 >
                   <img
                     className="avatar lg rounded-circle img-thumbnail"
-                    src="assets/images/profile_av.png"
+                    src={profile_av}
                     alt="profile"
                   />
                 </a>
@@ -246,7 +215,7 @@ function Header() {
                       <div className="d-flex py-1">
                         <img
                           className="avatar rounded-circle"
-                          src="assets/images/profile_av.png"
+                          src={profile_av}
                           alt="profile"
                         />
                         <div className="flex-fill ms-3">

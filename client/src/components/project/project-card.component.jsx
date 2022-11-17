@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { PROJECT_STATUS_TYPES } from "../../utils/initial-state/states";
 import { setCurrentProject } from "../../store/project/project.actions";
+import avatar8 from "../../assets/images/xs/avatar8.jpg";
 
 const ProjectCard = ({ project }) => {
   const dispatch = useDispatch();
@@ -54,27 +55,7 @@ const ProjectCard = ({ project }) => {
                 <div className="avatar-list avatar-list-stacked pt-2">
                   <img
                     className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar2.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar1.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar3.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar4.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar8.jpg"
+                    src={avatar8}
                     alt=""
                   />
                   <span
@@ -195,27 +176,7 @@ const ProjectCard = ({ project }) => {
                 <div className="avatar-list avatar-list-stacked pt-2">
                   <img
                     className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar2.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar1.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar3.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar4.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar8.jpg"
+                    src={avatar8}
                     alt=""
                   />
                   <span
@@ -336,27 +297,7 @@ const ProjectCard = ({ project }) => {
                 <div className="avatar-list avatar-list-stacked pt-2">
                   <img
                     className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar2.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar1.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar3.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar4.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar8.jpg"
+                    src={avatar8}
                     alt=""
                   />
                   <span
@@ -452,27 +393,7 @@ const ProjectCard = ({ project }) => {
                 <div className="avatar-list avatar-list-stacked pt-2">
                   <img
                     className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar2.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar1.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar3.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar4.jpg"
-                    alt=""
-                  />
-                  <img
-                    className="avatar rounded-circle sm"
-                    src="assets/images/xs/avatar8.jpg"
+                    src={avatar8}
                     alt=""
                   />
                 </div>
