@@ -26,7 +26,31 @@ export const PROJECT_TYPES = {
     name: "Backend Development",
     classIcon: "icofont-site-map",
   },
+  others: {
+    name: "others",
+    classIcon: "icofont-site-map",
+  },
 };
+
+export const getProjectTypes = (name) => {
+  switch (name) {
+    case PROJECT_TYPES.web_development.name:
+      return PROJECT_TYPES.web_development;
+
+    case PROJECT_TYPES.app_development.name:
+      return PROJECT_TYPES.app_development;
+
+    case PROJECT_TYPES.ui_ux_design.name:
+      return PROJECT_TYPES.ui_ux_design;
+
+    case PROJECT_TYPES.backend_development.name:
+      return PROJECT_TYPES.backend_development;
+
+    default:
+      return { ...PROJECT_TYPES.others, name: name };
+  }
+};
+
 export const PROJECT_STATUS_TYPES = {
   new: "Not Started",
   progress: "In Progress",

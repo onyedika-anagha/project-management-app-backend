@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { clients } from "../../utils/initial-state/states";
 
 const clientSlice = createSlice({
   name: "client",
   initialState: {
-    clients: clients,
+    clients: null,
     currentClient: null,
     loading: null,
     error: null,
@@ -18,9 +17,6 @@ const clientSlice = createSlice({
     },
     setError(state, action) {
       state.error = action.payload;
-    },
-    setClients(state, action) {
-      state.clients = action.payload;
     },
     setCurrentClient(state, action) {
       state.currentClient = action.payload;

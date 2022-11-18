@@ -1,26 +1,51 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
 import AddProject from "../../components/project/add-project.component";
 import DeleteProject from "../../components/project/delete-project.component";
 import EditProject from "../../components/project/edit-project.component";
 import ProjectCard from "../../components/project/project-card.component";
 import { PROJECT_STATUS_TYPES } from "../../utils/initial-state/states";
 import { selectAllProjects } from "../../store/project/project.selector";
+import { GET_PROJECTS, setProjects } from "../../store/project/project.actions";
+import Preloader from "../../components/preloader/preloader.component";
+import { alertMessage } from "../../utils/initial-state/initial-state";
 
 const Projects = () => {
+  const dispatch = useDispatch();
+
+  const { loading, error, data } = useQuery(GET_PROJECTS);
+  useEffect(() => {
+    if (data != null) {
+      console.log("database: ", data.projects);
+      dispatch(setProjects(data.projects));
+    }
+  }, [dispatch, data]);
   const projects = useSelector(selectAllProjects);
 
-  const newProjects = projects.filter(
-    (i) => i.status === PROJECT_STATUS_TYPES.new
-  );
-  const progress = projects.filter(
-    (i) => i.status === PROJECT_STATUS_TYPES.progress
-  );
-  const approval = projects.filter(
-    (i) => i.status === PROJECT_STATUS_TYPES.approval
-  );
-  const completed = projects.filter(
-    (i) => i.status === PROJECT_STATUS_TYPES.completed
-  );
+  const newProjects =
+    projects != null
+      ? projects.filter((i) => i.status === PROJECT_STATUS_TYPES.new)
+      : [];
+  const progress =
+    projects != null
+      ? projects.filter((i) => i.status === PROJECT_STATUS_TYPES.progress)
+      : [];
+  const approval =
+    projects != null
+      ? projects.filter((i) => i.status === PROJECT_STATUS_TYPES.approval)
+      : [];
+  const completed =
+    projects != null
+      ? projects.filter((i) => i.status === PROJECT_STATUS_TYPES.completed)
+      : [];
+  if (loading) return <Preloader />;
+  if (error) {
+    console.log("error: ", error);
+    alertMessage("error", "Something went wrong");
+
+    return <Preloader />;
+  }
   return (
     <>
       {/* Body: Body */}

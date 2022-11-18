@@ -110,11 +110,14 @@ const Clients = () => {
               </div>
             </div>
             {/* Row End */}
-            <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-              {clients.map((client) => (
-                <ClientItem client={client} key={client.id} />
-              ))}
-            </div>
+
+            {clients != null && (
+              <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
+                {clients.map((client) => (
+                  <ClientItem client={client} key={client.id} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
