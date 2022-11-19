@@ -32,6 +32,7 @@ const ProjectType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
+    projectType: { type: GraphQLString },
     status: { type: GraphQLString },
     client: {
       type: ClientType,

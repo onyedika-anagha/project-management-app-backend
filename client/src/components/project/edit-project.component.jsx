@@ -1,12 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentProject } from "../../store/project/project.actions";
 import { selectProject } from "../../store/project/project.selector";
+import Select from "react-select";
+
 const EditProject = () => {
   const project = useSelector(selectProject);
   const dispatch = useDispatch();
   const cancelEdit = () => {
     dispatch(setCurrentProject(null));
   };
+
+  if (project == null) {
+    return <></>;
+  }
+  const options = [
+    { value: "UI/UX Design", label: "UI/UX Design" },
+    { value: "Website Design", label: "Website Design" },
+    { value: "Web Development", label: "Web Development" },
+    { value: "App Development", label: "App Development" },
+    { value: "Development", label: "Development" },
+    { value: "Backend Development", label: "Backend Development" },
+    { value: "Software Testing", label: "Software Testing" },
+    { value: "Marketing", label: "Marketing" },
+    { value: "SEO", label: "SEO" },
+    { value: "Other", label: "Other" },
+  ];
+
+  const selectedOption = options.find(
+    (option) => option.value === project.projectType.name
+  );
+  console.log(selectedOption);
   return (
     <div
       className="modal fade"
@@ -27,6 +50,7 @@ const EditProject = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={cancelEdit}
             />
           </div>
           {project == null ? (
@@ -54,22 +78,11 @@ const EditProject = () => {
               </div>
               <div className="mb-3">
                 <label className="form-label">Project Category</label>
-                <select
+                <Select
                   className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected="">UI/UX Design</option>
-                  <option value={1}>Website Design</option>
-                  <option value={2}>App Development</option>
-                  <option value={3}>Quality Assurance</option>
-                  <option value={4}>Development</option>
-                  <option value={5}>Backend Development</option>
-                  <option value={6}>Software Testing</option>
-                  <option value={7}>Website Design</option>
-                  <option value={8}>Marketing</option>
-                  <option value={9}>SEO</option>
-                  <option value={10}>Other</option>
-                </select>
+                  options={options}
+                  defaultValue={selectedOption}
+                />
               </div>
               <div className="mb-3">
                 <label htmlFor="formFileMultiple456" className="form-label">
