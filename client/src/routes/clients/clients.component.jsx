@@ -5,12 +5,10 @@ import AddClient from "../../components/client/add-client.component";
 import ClientItem from "../../components/client/client-item.component";
 import DeleteClient from "../../components/client/delete-component.component";
 import EditClient from "../../components/client/edit-client.component";
+import UnknownError from "../../components/errors/unknown.component";
 import Preloader from "../../components/preloader/preloader.component";
-import {
-  createFetchClients,
-  createSetClients,
-  GET_CLIENTS,
-} from "../../store/client/client.actions";
+import { GET_CLIENTS } from "../../queries/clientQueries";
+import { createSetClients } from "../../store/client/client.actions";
 import { selectAllClients } from "../../store/client/client.selector";
 import { alertMessage } from "../../utils/initial-state/initial-state";
 
@@ -24,14 +22,14 @@ const Clients = () => {
       dispatch(createSetClients(data.clients));
     }
   }, [dispatch, data]);
-
+  console.log({ loading, error, data });
   const clients = useSelector(selectAllClients);
   if (loading) return <Preloader />;
   if (error) {
     console.log("error: ", error);
     alertMessage("error", "Something went wrong");
 
-    return <Preloader />;
+    return <UnknownError />;
   }
   return (
     <>

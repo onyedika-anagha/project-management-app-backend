@@ -1,6 +1,5 @@
 import { createAction } from "../../utils/reducer/reducer.utils";
 import { CLIENT_ACTION_TYPES } from "./client.types";
-import { gql } from "@apollo/client";
 
 export const createSetCurrentClient = (client) =>
   createAction(CLIENT_ACTION_TYPES.SET_CURRENT_CLIENT, client);
@@ -29,13 +28,3 @@ export const createLoading = (bool) =>
 export const createError = (error) =>
   createAction(CLIENT_ACTION_TYPES.SET_LOADING, error);
 // ------------------------------------------------------------------------------
-export const GET_CLIENTS = gql`
-  query getClients {
-    clients {
-      id
-      name
-      email
-      phone
-    }
-  }
-`;

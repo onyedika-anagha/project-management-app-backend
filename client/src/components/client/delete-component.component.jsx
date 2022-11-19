@@ -1,13 +1,32 @@
+import { useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
+import { DELETE_CLIENT } from "../../mutations/client.mutations";
+import { GET_CLIENTS } from "../../queries/clientQueries";
 import { createSetCurrentClient } from "../../store/client/client.actions";
 import { selectClient } from "../../store/client/client.selector";
+import { clients } from "../../utils/initial-state/states";
 
 const DeleteClient = () => {
   const client = useSelector(selectClient);
   const dispatch = useDispatch();
   const cancelDelete = () => {
-    dispatch(createSetCurrentClient(null));
-  };
+      dispatch(createSetCurrentClient(null));
+    },
+    clientId = client == null ? null : client.id;
+
+  const [deleteClient] = useMutation(DELETE_CLIENT, {
+    variables: { id: clientId },
+    // refetchQueries: [{ query: GET_CLIENTS }],
+    update(cache, { data: { deleteClient } }) {
+      const { client } = cache.readQuery({ query: GET_CLIENTS });
+      cache.writeQuery({
+        query: GET_CLIENTS,
+        data: {
+          clients: clients.filter((client) => client.id !== deleteClient.id),
+        },
+      });
+    },
+  });
 
   return (
     <div
@@ -53,7 +72,11 @@ const DeleteClient = () => {
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-danger color-fff">
+              <button
+                type="button"
+                className="btn btn-danger color-fff"
+                onClick={deleteClient}
+              >
                 Delete
               </button>
             </div>
