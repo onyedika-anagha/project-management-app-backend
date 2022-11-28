@@ -1,16 +1,15 @@
 const mongoose = require("mongoose"),
-  Schema = mongoose.Schema,
-  // bcrypt = require('bcrypt'),
-  SALT_WORK_FACTOR = 10;
+  Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   fullName: {
     type: String,
+    default: null,
   },
   name: {
     type: String,
     required: true,
-    index: { unique: true },
+    unique: true,
   },
   email: {
     type: String,
@@ -21,9 +20,14 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  status: {
+  token: {
     type: String,
-    enum: ["Not Verified", "Verified", "Deactivated"],
+  },
+  createdAt: {
+    type: String,
+  },
+  lastLoggedIn: {
+    type: String,
   },
 });
 

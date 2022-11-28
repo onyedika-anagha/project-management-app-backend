@@ -1,14 +1,26 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import DashboardHome from "../../components/dashboard/dashboard-home.component";
 import PageNotFound from "../../components/errors/404.component";
 import Header from "../../components/header/header.component";
 import AddUser from "../../components/modals/add-user.component";
 import Sidebar from "../../components/sidebar/sidebar.component";
+import { selectIsLoggedIn, selectUser } from "../../store/user/user.selector";
 import Clients from "../clients/clients.component";
 import Profile from "../profile/profile.component";
 import Projects from "../projects/projects.component";
 
 const Dashboard = () => {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const currentUser = useSelector(selectUser);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoggedIn && currentUser == null) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, currentUser, navigate]);
+
   return (
     <div id="mytask-layout" className="theme-indigo">
       <Sidebar />

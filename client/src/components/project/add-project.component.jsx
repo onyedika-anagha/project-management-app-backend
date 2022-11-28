@@ -1,4 +1,89 @@
+import { useMutation } from "@apollo/client";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
+import { ADD_PROJECT } from "../../mutations/project.mutation";
+import { GET_USER_PROJECTS } from "../../queries/project.queries";
+import { selectAllClients } from "../../store/client/client.selector";
+import { setProjects } from "../../store/project/project.actions";
+import { selectUserId } from "../../store/user/user.selector";
+import { alertMessage } from "../../utils/initial-state/initial-state";
+import { PROJECT_TYPE_OPTIONS } from "../../utils/initial-state/states";
+
+const defaultFormValues = {
+  name: "",
+  description: "",
+  clientId: "",
+  projectType: "",
+};
+
 const AddProject = () => {
+  const [formData, setFormData] = useState(defaultFormValues),
+    [loading, setLoading] = useState(false),
+    { name, description, clientId, projectType } = formData;
+  const clients = useSelector(selectAllClients);
+  const userId = useSelector(selectUserId);
+
+  const dispatch = useDispatch();
+  const clientOptions =
+    clients == null
+      ? clients
+      : clients.map((client) => {
+          return { value: client.id, label: client.name };
+        });
+  const selectedProjectType =
+    projectType.length > 0
+      ? PROJECT_TYPE_OPTIONS.filter((i) => i.value === projectType)[0]
+      : null;
+  const selectedClientOption =
+    clientOptions == null
+      ? null
+      : clientId.length > 0
+      ? clientOptions.filter((i) => i.id === clientId)[0]
+      : null;
+  console.log("selectedProjectType: ", selectedProjectType);
+  const resetForm = () => {
+      setFormData(defaultFormValues);
+    },
+    handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+  const [addProject] = useMutation(ADD_PROJECT, {
+      variables: { ...formData, userId },
+      update(cache, { data: { addProject } }) {
+        const { projects } = cache.readQuery({
+          query: GET_USER_PROJECTS,
+          variables: { id: userId },
+        });
+
+        // dispatch(setProjects(newData));
+        cache.writeQuery({
+          query: GET_USER_PROJECTS,
+          data: {
+            projects: [...projects, addProject],
+          },
+          variables: { id: userId },
+        });
+      },
+    }),
+    handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        await addProject();
+        resetForm();
+        alertMessage("success", "Project Added Successfully.");
+        setLoading(false);
+      } catch (error) {
+        console.log("error: ", error.message);
+        alertMessage(
+          "error",
+          "Something went wrong, please check your credentials or try again."
+        );
+      }
+    };
+  console.log(formData);
+
   return (
     <>
       {/* Create Project*/}
@@ -22,161 +107,101 @@ const AddProject = () => {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body">
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlInput77"
-                  className="form-label"
-                >
-                  Project Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleFormControlInput77"
-                  placeholder="Explain what the Project Name"
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Project Category</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select Project Category"
-                >
-                  <option selected="">UI/UX Design</option>
-                  <option value={1}>Website Design</option>
-                  <option value={2}>App Development</option>
-                  <option value={3}>Quality Assurance</option>
-                  <option value={4}>Development</option>
-                  <option value={5}>Backend Development</option>
-                  <option value={6}>Software Testing</option>
-                  <option value={7}>Website Design</option>
-                  <option value={8}>Marketing</option>
-                  <option value={9}>SEO</option>
-                  <option value={10}>Other</option>
-                </select>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formFileMultipleone" className="form-label">
-                  Project Images &amp; Document
-                </label>
-                <input
-                  className="form-control"
-                  type="file"
-                  id="formFileMultipleone"
-                  multiple=""
-                />
-              </div>
-              <div className="deadline-form">
-                <form>
-                  <div className="row g-3 mb-3">
-                    <div className="col">
-                      <label htmlFor="datepickerded" className="form-label">
-                        Project Start Date
-                      </label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        id="datepickerded"
-                      />
-                    </div>
-                    <div className="col">
-                      <label htmlFor="datepickerdedone" className="form-label">
-                        Project End Date
-                      </label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        id="datepickerdedone"
-                      />
-                    </div>
-                  </div>
-                  <div className="row g-3 mb-3">
-                    <div className="col-sm-12">
-                      <label className="form-label">Notifation Sent</label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option selected="">All</option>
-                        <option value={1}>Team Leader Only</option>
-                        <option value={2}>Team Member Only</option>
-                      </select>
-                    </div>
-                    <div className="col-sm-12">
-                      <label
-                        htmlFor="formFileMultipleone"
-                        className="form-label"
-                      >
-                        Task Assign Person
-                      </label>
-                      <select
-                        className="form-select"
-                        multiple=""
-                        aria-label="Default select Priority"
-                      >
-                        <option selected="">Lucinda Massey</option>
-                        <option value={1}>Ryan Nolan</option>
-                        <option value={2}>Oliver Black</option>
-                        <option value={3}>Adam Walker</option>
-                        <option value={4}>Brian Skinner</option>
-                        <option value={5}>Dan Short</option>
-                        <option value={5}>Jack Glover</option>
-                      </select>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div className="row g-3 mb-3">
-                <div className="col-sm">
-                  <label htmlFor="formFileMultipleone" className="form-label">
-                    Budget
-                  </label>
-                  <input type="number" className="form-control" />
-                </div>
-                <div className="col-sm">
-                  <label htmlFor="formFileMultipleone" className="form-label">
-                    Priority
-                  </label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select Priority"
+            <form onSubmit={handleSubmit}>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput77"
+                    className="form-label"
                   >
-                    <option selected="">Highest</option>
-                    <option value={1}>Medium</option>
-                    <option value={2}>Low</option>
-                    <option value={3}>Lowest</option>
-                  </select>
+                    Project Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleFormControlInput77"
+                    placeholder="Explain what the Project Name"
+                    name="name"
+                    value={name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Project Category</label>
+                  <Select
+                    options={PROJECT_TYPE_OPTIONS}
+                    name="projectType"
+                    defaultValue={selectedProjectType}
+                    onChange={({ value }) => {
+                      setFormData({ ...formData, projectType: value });
+                    }}
+                    value={projectType.length > 0 ? selectedProjectType : null}
+                    isClearable={true}
+                  />
+                </div>
+                <div className="deadline-form">
+                  <div className="row g-3 mb-3">
+                    <div className="col-sm-12">
+                      <label className="form-label">Client</label>
+
+                      <Select
+                        options={clientOptions}
+                        name="clientId"
+                        defaultValue={selectedClientOption}
+                        value={
+                          clientId.length > 0 ? selectedClientOption : null
+                        }
+                        onChange={({ value }) => {
+                          setFormData({ ...formData, clientId: value });
+                        }}
+                        isClearable={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlTextarea78"
+                    className="form-label"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea78"
+                    rows={3}
+                    placeholder="Add any extra details about the request"
+                    value={description}
+                    name="description"
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea78"
-                  className="form-label"
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
                 >
-                  Description (optional)
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea78"
-                  rows={3}
-                  placeholder="Add any extra details about the request"
-                  defaultValue={""}
-                />
+                  Cancel
+                </button>
+                {loading ? (
+                  <button type="button" className="btn btn-default">
+                    <div
+                      className="spinner-border text-light"
+                      role="status"
+                      style={{ width: 20, height: 20 }}
+                    >
+                      <span className="sr-only"></span>
+                    </div>
+                  </button>
+                ) : (
+                  <button type="submit" className="btn btn-primary">
+                    Create
+                  </button>
+                )}
               </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Done
-              </button>
-              <button type="button" className="btn btn-primary">
-                Create
-              </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ const ClientItem = ({ client }) => {
     dispatch(createSetCurrentClient(client));
   };
   return (
-    <div className="col">
+    <div className="col-lg-4 col-md-6">
       <div className="card teacher-card">
         <div className="card-body  d-flex">
           <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
@@ -50,13 +50,7 @@ const ClientItem = ({ client }) => {
             <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
               {client.email}
             </span>
-            <div className="video-setting-icon mt-3 pt-3 border-top">
-              <p>
-                Vestibulum ante ipsum primis in faucibus orci luctus et
-                ultrices.Vestibulum ante ipsum primis in faucibus orci luctus et
-                ultrices
-              </p>
-            </div>
+            <div className="video-setting-icon mt-3 pt-3 border-top"></div>
             <div className="d-flex flex-wrap align-items-center ct-btn-set">
               <a href="chat.html" className="btn btn-dark btn-sm mt-1 me-1">
                 <i className="icofont-ui-text-chat me-2 fs-6" />

@@ -1,7 +1,8 @@
 import { all, takeLatest, put, call } from "redux-saga/effects";
+import { AUTH_TOKEN } from "../../utils/helper/constants";
 
 import { alertMessage } from "../../utils/initial-state/initial-state";
-// import { fetchUserStore } from "../user-store/store-action";
+import jwtDecode from "jwt-decode";
 
 import {
   signUpFailed,
@@ -13,11 +14,13 @@ import { userActions } from "./user.slice";
 
 import { USER_ACTION_TYPES } from "./user.types";
 
-export const setCurrentUser = (user) => userActions.setCurrentUser(user);
+export const setCurrentUser = ({ payload }) =>
+  userActions.setCurrentUser(payload);
 
 export const setIsLoggedIn = (boolean) => userActions.setIsLoggedIn(boolean);
 
 export const setIsLoading = (boolean) => userActions.setIsLoading(boolean);
+export const setUserId = (id) => userActions.setUserId(id);
 
 export function* getSnapshotFromUserAuth(
   userAuth
@@ -34,6 +37,16 @@ export function* getSnapshotFromUserAuth(
     // } else {
     //   alertMessage("error", "user is not an admin");
     // }
+  } catch (error) {
+    yield put(userActions.setError(error));
+  }
+}
+export function* signInUser({ payload }) {
+  try {
+    yield put(setCurrentUser({ payload }));
+    yield put(userActions.setUserId(payload.id));
+    yield put(setIsLoggedIn(true));
+    yield put(setIsLoading(false));
   } catch (error) {
     yield put(userActions.setError(error));
   }
@@ -100,8 +113,22 @@ export function* signInAfterSignUp({ payload: user }) {
 
 export function* isUserAuthenticated() {
   try {
+    const userToken = sessionStorage.getItem(AUTH_TOKEN);
+    if (userToken != null && userToken) {
+      const decodeToken = jwtDecode(userToken);
+      console.log(decodeToken);
+      yield put(setUserId(decodeToken.user_id));
+      yield put(setIsLoggedIn(true));
+      if (decodeToken.exp * 1000 < Date.now()) {
+        sessionStorage.removeItem(AUTH_TOKEN);
+        yield put(userActions.logout());
+        yield put(setIsLoading(false));
+      }
+    } else {
+      yield put(userActions.logout());
+    }
     // const userAuth = yield call(getCurrentUser);
-    // // console.log(userAuth);
+    // console.log(userAuth);
     // if (userAuth) {
     //   yield call(getSnapshotFromUserAuth, userAuth);
     // } else {
@@ -111,6 +138,7 @@ export function* isUserAuthenticated() {
     // }
   } catch (error) {
     yield put(userActions.setError(error));
+    yield put(setIsLoading(false));
   }
 }
 
@@ -145,6 +173,9 @@ export function* onSignUpStart() {
 export function* onSignUpSuccess() {
   yield takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp);
 }
+export function* onSignInSuccess() {
+  yield takeLatest(USER_ACTION_TYPES.SIGN_IN_SUCCESS, signInUser);
+}
 
 export function* onCheckUserSession() {
   yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
@@ -167,5 +198,6 @@ export function* userSagas() {
     call(onSignUpSuccess),
     call(onSignOutStart),
     call(onSetIsLoading),
+    call(onSignInSuccess),
   ]);
 }

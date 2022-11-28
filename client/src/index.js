@@ -6,14 +6,10 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 
 import { store } from "./store/index";
-
-const client = new ApolloClient({
-  uri: "http://localhost:8080/graphql",
-  cache: new InMemoryCache(),
-});
+import client from "./apolloClient";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

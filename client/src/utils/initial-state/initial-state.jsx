@@ -5,7 +5,14 @@ import { themeActions } from "../../store/theme/theme-slice";
 import { toast } from "react-toastify";
 
 import { selectTheme } from "../../store/theme/theme.selector";
-import { checkUserSession } from "../../store/user/user.actions";
+import { checkUserSession, signInSuccess } from "../../store/user/user.actions";
+import {
+  selectIsLoggedIn,
+  selectUser,
+  selectUserId,
+} from "../../store/user/user.selector";
+import { GET_USER } from "../../queries/user.queries";
+import { useQuery } from "@apollo/client";
 
 export const alertMessage = (type, msg) => {
   const theme =
@@ -36,9 +43,28 @@ export const alertMessage = (type, msg) => {
     theme: theme,
   });
 };
+
+const FetchCurrentUser = ({ userId }) => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const currentUser = useSelector(selectUser);
+  const { data } = useQuery(GET_USER, {
+    variables: { id: userId },
+  });
+  useEffect(() => {
+    if (isLoggedIn && currentUser == null) {
+      if (userId != null && data != null) {
+        if (data.user != null) dispatch(signInSuccess(data.user));
+      }
+    }
+  }, [isLoggedIn, userId, currentUser, data, dispatch]);
+};
+
 const InitialState = () => {
   const dispatch = useDispatch();
   const theme = useSelector(selectTheme);
+  const userId = useSelector(selectUserId);
+
   useEffect(() => {
     if (
       localStorage.theme === "dark" ||
@@ -56,6 +82,8 @@ const InitialState = () => {
   useEffect(() => {
     dispatch(checkUserSession());
   }, []);
+
+  if (userId != null) return <FetchCurrentUser userId={userId} />;
 };
 
 export default InitialState;

@@ -9,7 +9,7 @@ const PageNotFound = () => {
           <div className="div-block-441 text_404">
             <h1 className="heading_h2">OOPS!</h1>
             <h1 className="paragraph-3 _404_paragraph">
-              You’ve found our inspiration secret weapon… a pink flamingo.
+              You’ve found nothing, sorry.
               <strong>
                 <br />
               </strong>

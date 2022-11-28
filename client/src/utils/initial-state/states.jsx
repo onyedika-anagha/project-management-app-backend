@@ -9,6 +9,19 @@ const makeId = (length = 12) => {
 };
 //
 
+export const PROJECT_TYPE_OPTIONS = [
+  { value: "UI/UX Design", label: "UI/UX Design" },
+  { value: "Website Design", label: "Website Design" },
+  { value: "Web Development", label: "Web Development" },
+  { value: "App Development", label: "App Development" },
+  { value: "Development", label: "Development" },
+  { value: "Backend Development", label: "Backend Development" },
+  { value: "Software Testing", label: "Software Testing" },
+  { value: "Marketing", label: "Marketing" },
+  { value: "SEO", label: "SEO" },
+  { value: "Other", label: "Other" },
+];
+
 export const PROJECT_TYPES = {
   web_development: {
     name: "Web Development",

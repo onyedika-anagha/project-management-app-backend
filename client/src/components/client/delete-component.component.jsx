@@ -1,31 +1,40 @@
 import { useMutation } from "@apollo/client";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DELETE_CLIENT } from "../../mutations/client.mutations";
-import { GET_CLIENTS } from "../../queries/clientQueries";
+import { GET_CLIENTS, GET_USER_CLIENTS } from "../../queries/client.queries";
+import { GET_USER_PROJECTS } from "../../queries/project.queries";
 import { createSetCurrentClient } from "../../store/client/client.actions";
 import { selectClient } from "../../store/client/client.selector";
-import { clients } from "../../utils/initial-state/states";
+import { selectUserId } from "../../store/user/user.selector";
+import { alertMessage } from "../../utils/initial-state/initial-state";
 
 const DeleteClient = () => {
+  const cancelButton = useRef();
   const client = useSelector(selectClient);
   const dispatch = useDispatch();
   const cancelDelete = () => {
       dispatch(createSetCurrentClient(null));
     },
     clientId = client == null ? null : client.id;
-
+  const handleClickOnCancelButton = () => {
+    if (cancelButton) {
+      cancelButton.current.click();
+    }
+  };
+  const userId = useSelector(selectUserId);
   const [deleteClient] = useMutation(DELETE_CLIENT, {
     variables: { id: clientId },
-    // refetchQueries: [{ query: GET_CLIENTS }],
-    update(cache, { data: { deleteClient } }) {
-      const { client } = cache.readQuery({ query: GET_CLIENTS });
-      cache.writeQuery({
-        query: GET_CLIENTS,
-        data: {
-          clients: clients.filter((client) => client.id !== deleteClient.id),
-        },
-      });
-    },
+    refetchQueries: [
+      {
+        query: GET_USER_CLIENTS,
+        variables: { id: userId },
+      },
+      {
+        query: GET_USER_PROJECTS,
+        variables: { id: userId },
+      },
+    ],
   });
 
   return (
@@ -69,6 +78,7 @@ const DeleteClient = () => {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 onClick={cancelDelete}
+                ref={cancelButton}
               >
                 Cancel
               </button>

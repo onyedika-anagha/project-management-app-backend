@@ -5,6 +5,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     currentUser: null,
+    userId: null,
     isLoggedIn: false,
     isLoading: true,
     error: null,
@@ -20,10 +21,14 @@ const userSlice = createSlice({
     setIsLoading(state, action) {
       state.isLoading = action.payload;
     },
+    setUserId(state, action) {
+      state.userId = action.payload;
+    },
     logout(state, action) {
       state.isLoading = false;
       state.isLoggedIn = false;
       state.currentUser = null;
+      state.userId = null;
     },
     setError(state, action) {
       state.isLoading = false;

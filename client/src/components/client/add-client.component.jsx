@@ -1,4 +1,60 @@
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { ADD_CLIENT } from "../../mutations/client.mutations";
+import { GET_USER_CLIENTS } from "../../queries/client.queries";
+import { selectUserId } from "../../store/user/user.selector";
+import { alertMessage } from "../../utils/initial-state/initial-state";
+const defaultFormValues = {
+  name: "",
+  email: "",
+  phone: "",
+};
 const AddClient = () => {
+  const [formData, setFormData] = useState(defaultFormValues),
+    [loading, setLoading] = useState(false);
+  const { name, email, phone } = formData;
+  const userId = useSelector(selectUserId);
+  const resetForm = () => {
+      setFormData(defaultFormValues);
+    },
+    handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    },
+    [addClient] = useMutation(ADD_CLIENT, {
+      variables: { ...formData, userId },
+      update(cache, { data: { addClient } }) {
+        const { clients } = cache.readQuery({
+          query: GET_USER_CLIENTS,
+          variables: { id: userId },
+        });
+        cache.writeQuery({
+          query: GET_USER_CLIENTS,
+          data: {
+            clients: [...clients, addClient],
+          },
+          variables: { id: userId },
+        });
+      },
+    }),
+    handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        setLoading(true);
+        await addClient();
+        resetForm();
+        alertMessage("success", "Client Added Successfully.");
+        setLoading(false);
+      } catch (error) {
+        console.log("error: ", error.message);
+        alertMessage(
+          "error",
+          "Something went wrong, please check your credentials or try again."
+        );
+        setLoading(false);
+      }
+    };
   return (
     <>
       {/* Create Client*/}
@@ -23,73 +79,25 @@ const AddClient = () => {
               />
             </div>
             <div className="modal-body">
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlInput877"
-                  className="form-label"
-                >
-                  Client Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleFormControlInput877"
-                  placeholder="Explain what the Project Name"
-                />
-              </div>
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlInput977"
-                  className="form-label"
-                >
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleFormControlInput977"
-                  placeholder="Explain what the Project Name"
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formFileMultipleoneone" className="form-label">
-                  Profile Image
-                </label>
-                <input
-                  className="form-control"
-                  type="file"
-                  id="formFileMultipleoneone"
-                />
-              </div>
               <div className="deadline-form">
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="row g-3 mb-3">
                     <div className="col">
                       <label
                         htmlFor="exampleFormControlInput177"
                         className="form-label"
                       >
-                        User Name
+                        Client Name
                       </label>
                       <input
                         type="text"
                         className="form-control"
                         id="exampleFormControlInput177"
-                        placeholder="User Name"
-                      />
-                    </div>
-                    <div className="col">
-                      <label
-                        htmlFor="exampleFormControlInput277"
-                        className="form-label"
-                      >
-                        Password
-                      </label>
-                      <input
-                        type="Password"
-                        className="form-control"
-                        id="exampleFormControlInput277"
-                        placeholder="Password"
+                        placeholder="Client Name"
+                        name="name"
+                        value={name}
+                        onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -105,7 +113,11 @@ const AddClient = () => {
                         type="email"
                         className="form-control"
                         id="exampleFormControlInput477"
-                        placeholder="User Name"
+                        placeholder="Client Email"
+                        name="email"
+                        value={email}
+                        onChange={handleChange}
+                        required
                       />
                     </div>
                     <div className="col">
@@ -119,13 +131,34 @@ const AddClient = () => {
                         type="text"
                         className="form-control"
                         id="exampleFormControlInput777"
-                        placeholder="User Name"
+                        placeholder="Phone Number"
+                        name="phone"
+                        value={phone}
+                        onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
+                  <center>
+                    {loading ? (
+                      <button type="button" className="btn btn-default">
+                        <div
+                          class="spinner-border text-light"
+                          role="status"
+                          style={{ width: 20, height: 20 }}
+                        >
+                          <span class="sr-only"></span>
+                        </div>
+                      </button>
+                    ) : (
+                      <button type="submit" className="btn btn-primary">
+                        Create
+                      </button>
+                    )}
+                  </center>
                 </form>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label
                   htmlFor="exampleFormControlTextarea78"
                   className="form-label"
@@ -138,365 +171,9 @@ const AddClient = () => {
                   rows={3}
                   placeholder="Add any extra details about the request"
                   defaultValue={""}
+                  onChange={handleChange}
                 />
-              </div>
-              <div className="table-responsive">
-                <table className="table table-striped custom-table">
-                  <thead>
-                    <tr>
-                      <th>Project Permission</th>
-                      <th className="text-center">Read</th>
-                      <th className="text-center">Write</th>
-                      <th className="text-center">Create</th>
-                      <th className="text-center">Delete</th>
-                      <th className="text-center">Import</th>
-                      <th className="text-center">Export</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="fw-bold">Projects</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault1"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault2"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault3"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault4"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault5"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault6"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Tasks</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault7"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault8"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault9"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault10"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault11"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault12"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Chat</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault13"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault14"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault15"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault16"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault17"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault18"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Estimates</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault19"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault20"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault21"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault22"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault23"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault24"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Invoices</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault25"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault26"
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault27"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault28"
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault29"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault30"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="fw-bold">Timing Sheets</td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault31"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault32"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault33"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault34"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault35"
-                          defaultChecked=""
-                        />
-                      </td>
-                      <td className="text-center">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          defaultValue=""
-                          id="flexCheckDefault36"
-                          defaultChecked=""
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              </div> */}
             </div>
             <div className="modal-footer">
               <button
@@ -504,10 +181,7 @@ const AddClient = () => {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Done
-              </button>
-              <button type="button" className="btn btn-primary">
-                Create
+                Cancel
               </button>
             </div>
           </div>

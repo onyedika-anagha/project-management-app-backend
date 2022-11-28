@@ -70,28 +70,28 @@ const ProjectCard = ({ project }) => {
               <div className="row g-2 pt-4">
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-paper-clip" />
-                    <span className="ms-2">5 Attach</span>
+                    <i className="icofont-user-male" />
+                    <span className="ms-2">{project.client.name}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-sand-clock" />
-                    <span className="ms-2">4 Month</span>
+                    <i className="icofont-phone" />
+                    <span className="ms-2">{project.client.phone}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-12">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-group-students " />
-                    <span className="ms-2">5 Members</span>
+                    <i className="icofont-email " />
+                    <span className="ms-2">{project.client.email}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                {/* <div className="col-6">
                   <div className="d-flex align-items-center">
                     <i className="icofont-ui-text-chat" />
                     <span className="ms-2">10</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="dividers-block" />
               <div className="d-flex align-items-center justify-content-between mb-2">
@@ -191,28 +191,28 @@ const ProjectCard = ({ project }) => {
               <div className="row g-2 pt-4">
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-paper-clip" />
-                    <span className="ms-2">5 Attach</span>
+                    <i className="icofont-user-male" />
+                    <span className="ms-2">{project.client.name}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-sand-clock" />
-                    <span className="ms-2">4 Month</span>
+                    <i className="icofont-phone" />
+                    <span className="ms-2">{project.client.phone}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-12">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-group-students " />
-                    <span className="ms-2">5 Members</span>
+                    <i className="icofont-email " />
+                    <span className="ms-2">{project.client.email}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                {/* <div className="col-6">
                   <div className="d-flex align-items-center">
                     <i className="icofont-ui-text-chat" />
                     <span className="ms-2">10</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="dividers-block" />
               <div className="d-flex align-items-center justify-content-between mb-2">
@@ -312,28 +312,28 @@ const ProjectCard = ({ project }) => {
               <div className="row g-2 pt-4">
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-paper-clip" />
-                    <span className="ms-2">5 Attach</span>
+                    <i className="icofont-user-male" />
+                    <span className="ms-2">{project.client.name}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-sand-clock" />
-                    <span className="ms-2">4 Month</span>
+                    <i className="icofont-phone" />
+                    <span className="ms-2">{project.client.phone}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-12">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-group-students " />
-                    <span className="ms-2">5 Members</span>
+                    <i className="icofont-email " />
+                    <span className="ms-2">{project.client.email}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                {/* <div className="col-6">
                   <div className="d-flex align-items-center">
                     <i className="icofont-ui-text-chat" />
                     <span className="ms-2">10</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="dividers-block" />
               <div className="d-flex align-items-center justify-content-between mb-2">
@@ -401,28 +401,28 @@ const ProjectCard = ({ project }) => {
               <div className="row g-2 pt-4">
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-paper-clip" />
-                    <span className="ms-2">5 Attach</span>
+                    <i className="icofont-user-male" />
+                    <span className="ms-2">{project.client.name}</span>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-sand-clock" />
-                    <span className="ms-2 text-success">Completed</span>
+                    <i className="icofont-phone" />
+                    <span className="ms-2">{project.client.phone}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-12">
                   <div className="d-flex align-items-center">
-                    <i className="icofont-group-students " />
-                    <span className="ms-2">5 Members</span>
+                    <i className="icofont-email " />
+                    <span className="ms-2">{project.client.email}</span>
                   </div>
                 </div>
-                <div className="col-6">
+                {/* <div className="col-6">
                   <div className="d-flex align-items-center">
                     <i className="icofont-ui-text-chat" />
                     <span className="ms-2">10</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="dividers-block" />
               <div className="d-flex align-items-center justify-content-between mb-2">

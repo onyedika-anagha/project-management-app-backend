@@ -1,39 +1,27 @@
 import { useQuery } from "@apollo/client";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddClient from "../../components/client/add-client.component";
 import ClientItem from "../../components/client/client-item.component";
 import DeleteClient from "../../components/client/delete-component.component";
 import EditClient from "../../components/client/edit-client.component";
 import UnknownError from "../../components/errors/unknown.component";
 import Preloader from "../../components/preloader/preloader.component";
-import { GET_CLIENTS } from "../../queries/clientQueries";
-import { createSetClients } from "../../store/client/client.actions";
-import { selectAllClients } from "../../store/client/client.selector";
-import { alertMessage } from "../../utils/initial-state/initial-state";
+import { GET_USER_CLIENTS } from "../../queries/client.queries";
+import { selectUserId } from "../../store/user/user.selector";
+// import { alertMessage } from "../../utils/initial-state/initial-state";
 
 const Clients = () => {
-  const dispatch = useDispatch();
-
-  const { loading, error, data } = useQuery(GET_CLIENTS);
-  useEffect(() => {
-    if (data != null) {
-      console.log("database: ", data.clients);
-      dispatch(createSetClients(data.clients));
-    }
-  }, [dispatch, data]);
-  console.log({ loading, error, data });
-  const clients = useSelector(selectAllClients);
+  const userId = useSelector(selectUserId);
+  const { loading, error, data } = useQuery(GET_USER_CLIENTS, {
+    variables: { id: userId },
+  });
   if (loading) return <Preloader />;
-  if (error) {
-    console.log("error: ", error);
-    alertMessage("error", "Something went wrong");
-
-    return <UnknownError />;
-  }
-  return (
-    <>
-      {!loading && !error && (
+  if (error) return <UnknownError />;
+  if (!loading && !error) {
+    console.log(data);
+    const { clients } = data;
+    return (
+      <>
         <div className="body d-flex py-lg-3 py-md-2">
           <div className="container-xxl">
             <div className="row clearfix">
@@ -118,12 +106,13 @@ const Clients = () => {
             )}
           </div>
         </div>
-      )}
-      <AddClient />
-      <DeleteClient />
-      <EditClient />
-    </>
-  );
+
+        <AddClient />
+        <DeleteClient />
+        <EditClient />
+      </>
+    );
+  }
 };
 
 export default Clients;
