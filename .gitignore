@@ -105,5 +105,5 @@ dist
 
 # CLient(front-end)
 
-/client
-/public
+client/
+public/
