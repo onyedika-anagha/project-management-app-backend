@@ -24,6 +24,15 @@ const longEnUSFormatter = new Intl.DateTimeFormat("en-US", {
   hour12: false,
   timeZone: "America/Los_Angeles",
 });
+const makeId = (length = 12) => {
+  var result = "";
+  var characters = "1234567890qwertyuiopasdfghjklzxcvbnm";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
 // mutations
 const mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -133,6 +142,95 @@ const mutation = new GraphQLObjectType({
           // if user doesn't exists throw error
           throw new Error(`Incorrect password`, "INCORRECT_PASSWORD");
         }
+      },
+    },
+    // google  sign in
+    googleLogin: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLNonNull(GraphQLString) },
+      },
+
+      async resolve(parent, { email }) {
+        const user = await User.findOne({ email });
+        if (user) {
+          const token = jwt.sign(
+            { user_id: user._id, email },
+            process.env.JWT_TOKEN_STRING,
+            {
+              expiresIn: "3h",
+            }
+          );
+
+          // attach to out User model that we found above
+          user.token = token;
+          //   update lastLoggedIn
+
+          const lastLoggedIn = longEnUSFormatter.format(new Date());
+
+          User.findByIdAndUpdate(
+            user.id,
+            {
+              $set: {
+                lastLoggedIn,
+              },
+            },
+            { new: true }
+          );
+          return user;
+        } else {
+          // if user doesn't exists throw error
+          throw new Error(`User Doesn't exist`, "UNKNOWN_USER");
+        }
+      },
+    },
+    // google  sign in
+    googleSignUp: {
+      type: UserType,
+      args: {
+        fullName: { type: GraphQLNonNull(GraphQLString) },
+        name: { type: GraphQLNonNull(GraphQLString) },
+        email: { type: GraphQLNonNull(GraphQLString) },
+      },
+
+      async resolve(parent, { fullName, name, email }) {
+        const checkForUserByEmail = await User.findOne({ email });
+        // throw error if that user exists
+        if (checkForUserByEmail) {
+          throw new Error(
+            `A user is already registered with the email ${email}`,
+            "USER_ALREADY_REGISTERED"
+          );
+        }
+        // Encrypt password
+        var encryptedPassword = await bcrypt.hash(makeId(10), 10);
+
+        // Build out mongoose model(User)
+
+        const createdAt = longEnUSFormatter.format(new Date());
+
+        const newUser = new User({
+          fullName,
+          name,
+          email: email.toLowerCase(),
+          password: encryptedPassword,
+          createdAt,
+          lastLoggedIn: createdAt,
+        });
+
+        // Create our JWT (attach to out User model)
+        const userToken = jwt.sign(
+          { user_id: newUser._id, email },
+          process.env.JWT_TOKEN_STRING,
+          {
+            expiresIn: "3h",
+          }
+        );
+        newUser.token = userToken;
+
+        // Save Our user in MongoDB
+
+        return await newUser.save();
       },
     },
 

@@ -16,9 +16,11 @@ import { useQuery } from "@apollo/client";
 
 export const alertMessage = (type, msg) => {
   const theme =
-    localStorage.theme !== null
-      ? localStorage.theme
-      : window.matchMedia("(prefers-color-scheme: dark)")
+    localStorage.theme !== null && localStorage.theme === "dark"
+      ? "dark"
+      : localStorage.theme !== null && localStorage.theme === "light"
+      ? "light"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
 
@@ -78,10 +80,10 @@ const InitialState = () => {
     } else {
       document.querySelector("html").setAttribute("data-theme", "light");
     }
-  }, [theme]);
+  }, [theme, dispatch]);
   useEffect(() => {
     dispatch(checkUserSession());
-  }, []);
+  }, [dispatch]);
 
   if (userId != null) return <FetchCurrentUser userId={userId} />;
 };

@@ -1,12 +1,12 @@
 const express = require("express");
 const colors = require("colors");
 const cors = require("cors");
-// require("dotenv").config();
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
 const { graphqlHTTP } = require("express-graphql");
 const schema = require("./schema/schema");
 const port = process.env.PORT || 8000;
 const connectDB = require("./config/db");
-const path = require("path");
+// const path = require("path");
 
 const app = express();
 
@@ -23,10 +23,10 @@ app.use(
   })
 );
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "public", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "public", "index.html"));
+// });
 
 app.listen(port, () => console.log("Server running on port ", port));

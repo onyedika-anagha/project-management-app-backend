@@ -7,6 +7,7 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { store } from "./store/index";
 import client from "./apolloClient";
@@ -16,9 +17,13 @@ root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <GoogleOAuthProvider
+          clientId={`739216467271-3co6p3qtffspu8uuakh6kio5751l3sa5.apps.googleusercontent.com`}
+        >
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </GoogleOAuthProvider>
       </Provider>
     </ApolloProvider>
   </React.StrictMode>
@@ -27,7 +32,7 @@ root.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.unregister();
+serviceWorkerRegistration.register();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
