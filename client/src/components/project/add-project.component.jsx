@@ -1,11 +1,10 @@
 import { useMutation } from "@apollo/client";
-import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import Select from "react-select";
 import { ADD_PROJECT } from "../../mutations/project.mutation";
 import { GET_USER_PROJECTS } from "../../queries/project.queries";
 import { selectAllClients } from "../../store/client/client.selector";
-import { setProjects } from "../../store/project/project.actions";
 import { selectUserId } from "../../store/user/user.selector";
 import { alertMessage } from "../../utils/initial-state/initial-state";
 import { PROJECT_TYPE_OPTIONS } from "../../utils/initial-state/states";
@@ -24,7 +23,6 @@ const AddProject = () => {
   const clients = useSelector(selectAllClients);
   const userId = useSelector(selectUserId);
 
-  const dispatch = useDispatch();
   const clientOptions =
     clients == null
       ? clients

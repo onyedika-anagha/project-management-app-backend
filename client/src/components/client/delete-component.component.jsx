@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DELETE_CLIENT } from "../../mutations/client.mutations";
-import { GET_CLIENTS, GET_USER_CLIENTS } from "../../queries/client.queries";
+import { GET_USER_CLIENTS } from "../../queries/client.queries";
 import { GET_USER_PROJECTS } from "../../queries/project.queries";
 import { createSetCurrentClient } from "../../store/client/client.actions";
 import { selectClient } from "../../store/client/client.selector";
@@ -35,6 +35,10 @@ const DeleteClient = () => {
         variables: { id: userId },
       },
     ],
+    onCompleted: () => {
+      handleClickOnCancelButton();
+      alertMessage("error", "Client Deleted Successfully");
+    },
   });
 
   return (

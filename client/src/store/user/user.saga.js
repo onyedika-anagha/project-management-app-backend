@@ -4,12 +4,7 @@ import { AUTH_TOKEN } from "../../utils/helper/constants";
 import { alertMessage } from "../../utils/initial-state/initial-state";
 import jwtDecode from "jwt-decode";
 
-import {
-  signUpFailed,
-  signUpSuccess,
-  signOutFailed,
-  signOutSuccess,
-} from "./user.actions";
+import { signUpFailed, signOutFailed, signOutSuccess } from "./user.actions";
 import { userActions } from "./user.slice";
 
 import { USER_ACTION_TYPES } from "./user.types";
@@ -47,6 +42,7 @@ export function* signInUser({ payload }) {
     yield put(userActions.setUserId(payload.id));
     yield put(setIsLoggedIn(true));
     yield put(setIsLoading(false));
+    alertMessage("success", "Login successful");
   } catch (error) {
     yield put(userActions.setError(error));
   }
@@ -146,6 +142,8 @@ export function* signOut() {
   try {
     // yield call(signOutUser);
     yield put(signOutSuccess());
+
+    yield put(userActions.logout());
   } catch (error) {
     yield put(signOutFailed(error));
   }

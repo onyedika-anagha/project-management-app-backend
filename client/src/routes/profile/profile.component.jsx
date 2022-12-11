@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/user/user.selector";
+
 const Profile = () => {
+  const user = useSelector(selectUser);
   return (
     <>
       {/* Body: Body */}
@@ -27,18 +31,18 @@ const Profile = () => {
                       />
                     </a>
                     <div className="about-info d-flex align-items-center mt-3 justify-content-center flex-column">
-                      <h6 className="mb-0 fw-bold d-block fs-6">CEO</h6>
+                      <h6 className="mb-0 fw-bold d-block fs-6">ADMIN</h6>
                       <span className="text-muted small">
-                        CLIENT ID : PXL-0001
+                        USER ID : PXL-0001
                       </span>
                     </div>
                   </div>
                   <div className="teacher-info border-start ps-xl-4 ps-md-4 ps-sm-4 ps-4 w-100">
                     <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                      AgilSoft Tech
+                      {user.fullName}
                     </h6>
                     <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                      Ryan Ogden
+                      {user.name}
                     </span>
                     <p className="mt-2 small">
                       The purpose of lorem ipsum is to create a natural looking
@@ -56,9 +60,7 @@ const Profile = () => {
                       <div className="col-xl-5">
                         <div className="d-flex align-items-center">
                           <i className="icofont-email" />
-                          <span className="ms-2 small">
-                            ryanogden@gmail.com
-                          </span>
+                          <span className="ms-2 small">{user.email}</span>
                         </div>
                       </div>
                       <div className="col-xl-5">

@@ -3,12 +3,20 @@ import { selectSideBarQuery } from "../../store/sidebar/sidebar.selector";
 import { sidebarActions } from "../../store/sidebar/sidebar.slice";
 import profile_av from "../../assets/images/profile_av.png";
 import { selectUser } from "../../store/user/user.selector";
+import { Link } from "react-router-dom";
+import { AUTH_TOKEN } from "../../utils/helper/constants";
+import { signOutStart } from "../../store/user/user.actions";
 
 function Header() {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectSideBarQuery);
   const user = useSelector(selectUser);
   const toggleSideBar = () => dispatch(sidebarActions.setIsOpen(!isOpen));
+
+  const logOut = () => {
+    sessionStorage.removeItem(AUTH_TOKEN);
+    dispatch(signOutStart());
+  };
   if (user != null && user)
     return (
       <>
@@ -26,7 +34,7 @@ function Header() {
                   >
                     <i className="icofont-info-square fs-5" />
                   </a>
-                  <div className="avatar-list avatar-list-stacked px-3">
+                  {/* <div className="avatar-list avatar-list-stacked px-3">
                     <span
                       className="avatar rounded-circle text-center pointer"
                       data-bs-toggle="modal"
@@ -34,9 +42,9 @@ function Header() {
                     >
                       <i className="icofont-ui-add" />
                     </span>
-                  </div>
+                  </div> */}
                 </div>
-                <div className="dropdown notifications zindex-popover">
+                {/* <div className="dropdown notifications zindex-popover">
                   <a
                     className="nav-link dropdown-toggle pulse"
                     href="#!"
@@ -191,7 +199,7 @@ function Header() {
                       </a>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                   <div className="u-info me-2">
                     <p className="mb-0 text-end line-height-sm ">
@@ -235,28 +243,29 @@ function Header() {
                         </div>
                       </div>
                       <div className="list-group m-2 ">
-                        <a
-                          href="task.html"
+                        <Link
+                          to="/dashboard/task"
                           className="list-group-item list-group-item-action border-0 "
                         >
                           <i className="icofont-tasks fs-5 me-3" />
                           My Task
-                        </a>
-                        <a
-                          href="members.html"
+                        </Link>
+                        <Link
+                          to="/dashboard/profile"
                           className="list-group-item list-group-item-action border-0 "
                         >
                           <i className="icofont-ui-user-group fs-6 me-3" />
-                          members
-                        </a>
+                          Profile
+                        </Link>
                         <a
-                          href="ui-elements/auth-signin.html"
+                          href="#!"
                           className="list-group-item list-group-item-action border-0 "
+                          onClick={logOut}
                         >
                           <i className="icofont-logout fs-6 me-3" />
                           Signout
                         </a>
-                        <div>
+                        {/* <div>
                           <hr className="dropdown-divider border-dark" />
                         </div>
                         <a
@@ -265,7 +274,7 @@ function Header() {
                         >
                           <i className="icofont-contact-add fs-5 me-3" />
                           Add personal account
-                        </a>
+                        </a> */}
                       </div>
                     </div>
                   </div>

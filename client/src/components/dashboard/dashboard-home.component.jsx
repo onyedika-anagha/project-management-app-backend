@@ -1,10 +1,16 @@
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/user/user.selector";
+import { greeting } from "../../utils/helper/helper";
+import taskSvg from "../../assets/images/task-view.svg";
+
 const DashboardHome = () => {
+  const user = useSelector(selectUser);
   return (
     <>
       {/* Body: Body */}
       <div className="body d-flex py-3">
         <div className="container-xxl">
-          <div className="row g-3 mb-3 row-deck">
+          {/* <div className="row g-3 mb-3 row-deck">
             <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
               <div className="card ">
                 <div className="card-body">
@@ -71,7 +77,7 @@ const DashboardHome = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Row End */}
           <div className="row g-3 mb-3 row-deck">
             <div className="col-md-12 col-lg-8 col-xl-7 col-xxl-7">
@@ -80,25 +86,18 @@ const DashboardHome = () => {
                   <div className="row align-items-center">
                     <div className="col-12 col-md-5 col-lg-6 order-md-2 ">
                       <div className="text-center p-4">
-                        <img
-                          src="assets/images/task-view.svg"
-                          alt="..."
-                          className="img-fluid"
-                        />
+                        <img src={taskSvg} alt="..." className="img-fluid" />
                       </div>
                     </div>
                     <div className="col-12 col-md-7 col-lg-6 order-md-1 px-4">
-                      <h3 className="fw-bold ">Dylan Hunter</h3>
+                      <h3 className="fw-bold ">{user.fullName}</h3>
                       <p className="line-height-custom">
-                        Welcome back Dylan Hunter.Integer molestie, arcu non
-                        porta sollicitudin, arcu felis aliquam urna, placerat
-                        maximus lorem urna commodo sem. Pellentesque venenatis
-                        leo quam, sed mattis sapien lobortis ut.placerat maximus
-                        lorem urna commodo sem
+                        {greeting(user.name)}
                       </p>
+                      <span>Get in contact with us...</span>
                       <a
                         className="btn bg-secondary text-light btn-lg lift"
-                        href="http://pixelwibes.com/"
+                        href="https://onyedika-anagha.netlify.app"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -109,7 +108,7 @@ const DashboardHome = () => {
                 </div>
               </div>
             </div>
-            <div className="col-md-12 col-lg-4 col-xl-5 col-xxl-5">
+            {/* <div className="col-md-12 col-lg-4 col-xl-5 col-xxl-5">
               <div className="alert alert-primary p-3 mb-0 w-100">
                 <h6 className="fw-bold mb-1">Create Project Credentials</h6>
                 <p className="small mb-4">
@@ -140,10 +139,10 @@ const DashboardHome = () => {
                   Create Credentials
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
           {/* Row End */}
-          <div className="row g-3 mb-3 row-deck">
+          {/* <div className="row g-3 mb-3 row-deck">
             <div className="col-md-12 col-lg-4">
               <div className="card">
                 <div className="card-body">
@@ -197,9 +196,9 @@ const DashboardHome = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Row End */}
-          <div className="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4 row-cols-xxl-4">
+          {/* <div className="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4 row-cols-xxl-4">
             <div className="col">
               <div className="card bg-primary">
                 <div className="card-body text-white d-flex align-items-center">
@@ -499,7 +498,7 @@ const DashboardHome = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Row End */}
         </div>
       </div>
